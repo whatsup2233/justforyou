@@ -137,6 +137,7 @@ body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif;m
     <button class="key del" onclick="pressKey('del')">⌫</button>
     <button class="key zero" onclick="pressKey('0')">0</button>
   </div>
+  <button id="enterBtn" onclick="checkPin()" style="opacity:0;transition:opacity 0.3s;margin-top:8px;background:linear-gradient(135deg,#7c3aed,#d946ef);border:none;color:white;padding:14px 48px;border-radius:50px;font-family:DM Sans,sans-serif;font-size:16px;font-weight:500;cursor:pointer;letter-spacing:0.5px;">Open 💜</button>
 </div>
 
 <div id="site">
@@ -437,10 +438,10 @@ function toggleMusic(){
 let entered='';
 function pressKey(k){
   document.getElementById('pinError').classList.remove('show');
-  if(k==='del'){entered=entered.slice(0,-1);updateDots();return}
+  if(k==='del'){entered=entered.slice(0,-1);updateDots();document.getElementById('enterBtn').style.opacity='0';return}
   if(entered.length>=4)return;
   entered+=k;updateDots();
-  if(entered.length===4)setTimeout(checkPin,200);
+  if(entered.length===4)document.getElementById("enterBtn").style.opacity="1";
 }
 function updateDots(){for(let i=0;i<4;i++)document.getElementById('d'+i).classList.toggle('filled',i<entered.length)}
 function checkPin(){

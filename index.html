@@ -100,6 +100,18 @@ body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif;m
 <body>
 <canvas id="bgCanvas"></canvas>
 
+<!-- YouTube Player -->
+<iframe id="ytFrame" width="1" height="1" style="position:fixed;bottom:-999px;opacity:0;pointer-events:none;"
+  src="https://www.youtube.com/embed/lp-EO5I60KA?autoplay=0&loop=1&playlist=lp-EO5I60KA&enablejsapi=1"
+  allow="autoplay" frameborder="0"></iframe>
+
+<!-- Music bar -->
+<div id="musicBar" style="display:none;position:fixed;bottom:24px;right:24px;z-index:50;background:rgba(30,5,50,0.88);backdrop-filter:blur(12px);border:1px solid rgba(124,58,237,0.4);border-radius:50px;padding:10px 20px;align-items:center;gap:10px;cursor:pointer;" onclick="toggleMusic()">
+  <span style="font-size:15px;">🎵</span>
+  <span style="font-size:12px;color:#d8b4fe;font-family:DM Sans,sans-serif;font-weight:500;">Thinking Out Loud — Ed Sheeran</span>
+  <span id="musicToggle" style="font-size:12px;color:#a78bfa;">▐▐</span>
+</div>
+
 <div id="lockScreen">
   <div class="lock-icon">🔒</div>
   <div class="lock-title">This page is just for you</div>
@@ -398,6 +410,30 @@ body{background:var(--dark);color:var(--text);font-family:'DM Sans',sans-serif;m
 
 <script>
 const PIN='1104';
+let musicPlaying = false;
+
+function startMusic(){
+  const bar = document.getElementById('musicBar');
+  bar.style.display = 'flex';
+  const frame = document.getElementById('ytFrame');
+  // Reload with autoplay=1
+  frame.src = 'https://www.youtube.com/embed/lp-EO5I60KA?autoplay=1&loop=1&playlist=lp-EO5I60KA&enablejsapi=1&mute=0';
+  musicPlaying = true;
+}
+
+function toggleMusic(){
+  const frame = document.getElementById('ytFrame');
+  const toggle = document.getElementById('musicToggle');
+  if(musicPlaying){
+    frame.src = 'https://www.youtube.com/embed/lp-EO5I60KA?autoplay=0&loop=1&playlist=lp-EO5I60KA';
+    toggle.textContent = '▶';
+    musicPlaying = false;
+  } else {
+    frame.src = 'https://www.youtube.com/embed/lp-EO5I60KA?autoplay=1&loop=1&playlist=lp-EO5I60KA';
+    toggle.textContent = '▐▐';
+    musicPlaying = true;
+  }
+}
 let entered='';
 function pressKey(k){
   document.getElementById('pinError').classList.remove('show');
@@ -411,7 +447,7 @@ function checkPin(){
   if(entered===PIN){
     const ls=document.getElementById('lockScreen');
     ls.style.transition='opacity .6s';ls.style.opacity='0';
-    setTimeout(()=>{ls.style.display='none';document.getElementById('site').style.display='block'},600);
+    setTimeout(()=>{ls.style.display='none';document.getElementById('site').style.display='block';startMusic()},600);
   }else{
     document.getElementById('pinError').classList.add('show');
     document.querySelectorAll('.pin-dot').forEach(d=>{d.style.borderColor='#f87171';setTimeout(()=>d.style.borderColor='',600)});
